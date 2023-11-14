@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "ms-pyright.pyright",
+    "ms-python.black-formatter",
+    "ms-python.vscode-pylance",
+    "charliermarsh.ruff",
+    "wayou.vscode-todo-highlight",
+    "github.vscode-github-actions",
+    "rvest.vs-code-prettier-eslint",
+    "dbaeumer.vscode-eslint"
+  ]
+}
