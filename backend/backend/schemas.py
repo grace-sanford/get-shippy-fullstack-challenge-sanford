@@ -1,9 +1,17 @@
 from pydantic import BaseModel
+from datetime import datetime
+from pydantic import ValidationError
 
 
 class ReportBase(BaseModel):
-    # TODO:
-    pass
+    try:
+        # TODO:
+        id: int
+        timestamp: datetime
+    except ValidationError as e:
+        pass
+class ReportCreate(BaseModel):
+    timestamp: datetime
 
 
 class ReportData(BaseModel):
