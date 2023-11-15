@@ -1,7 +1,7 @@
 // components/AllReports.tsx
 import React, { useState, useEffect } from 'react';
 import { isNamedExports } from 'typescript';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import reportService from '../services/reportService';
 import CreateReport from '../createReport/CreateReport';
 import { Alert, AlertDescription } from '../common/alert';
@@ -45,7 +45,6 @@ const AllReports: React.FC = (): JSX.Element => {
             };
             void fetchData(); // Mark the promise as ignored with the `void` operator
         }
-        navigate('/');
     }, [reportCount]);
 
     const handleDeleteReport = async (id: number): Promise<void> => {
@@ -75,24 +74,26 @@ const AllReports: React.FC = (): JSX.Element => {
             <h2 className="font-medium">Saved Reports</h2>
             <ul>
                 {allReports !== null && allReports !== undefined && allReports.length > 0 ? (
-                    allReports.map((report: any) => (
+                    allReports.map((report: Report) => (
                         <li key={report.id}>
-                            {/* Render each report in the list */}
-                            {/* Adjust the structure based on your actual report data */}
                             <div>
-                                {report.id}. {report.name}
+                                <Link to={`/reports/${report.id}`}>
+                                    {report.id}. {report.name}
+                                </Link>
                             </div>
+                            {/* Add more details as needed */}
                             <div>Start Date: {report.date_start}</div>
                             <div>End Date: {report.date_end}</div>
                             <div>Metric: {report.metric}</div>
                             {/* Add more details as needed */}
                             <button
+                                style={{ color: 'red' }}
                                 type="button"
                                 onClick={() => {
                                     handleDeleteReportWrapper(report.id);
                                 }}
                             >
-                                X
+                                X Delete report
                             </button>
                         </li>
                     ))
