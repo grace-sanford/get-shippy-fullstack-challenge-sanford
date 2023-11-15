@@ -7,6 +7,13 @@ const reportService = {
         const response = await axios.get(`${API_BASE_URL}/reports`);
         return response.data;
     },
+    createReport: async (id, data) => {
+        console.log('data', data);
+
+        const response = await axios.post(`${API_BASE_URL}/reports/${id}`, data);
+        console.log('response -- reportService', response);
+        return response.data;
+    },
     deleteReport: async (id) => {
         const response = await axios.delete(`${API_BASE_URL}/reports/${id}`);
         return response.data;

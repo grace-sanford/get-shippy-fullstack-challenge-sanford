@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Form, FormItem, FormLabel, FormControl, FormField } from '../common/form';
+import reportService from '../services/reportService';
 
 interface TickerCreate {
     ticker: string;
@@ -8,15 +9,22 @@ interface TickerCreate {
 }
 
 interface ReportCreate {
+    id: number;
     date_start: string;
     date_end: string;
     metric: string;
     name: string;
     tickers: TickerCreate[];
 }
+interface CreateReportProps {
+    reportCount: number;
+    setReportCount: React.Dispatch<React.SetStateAction<number>>;
+}
 
-const CreateReport: React.FC = (): JSX.Element => {
+const CreateReport: React.FC<CreateReportProps> = ({ reportCount, setReportCount }): JSX.Element => {
+    console.log('Render CreateReport with reportId:', reportCount);
     const [reportData, setReportData] = useState<ReportCreate>({
+        id: reportCount,
         date_start: '',
         date_end: '',
         metric: '',
@@ -44,6 +52,7 @@ const CreateReport: React.FC = (): JSX.Element => {
     };
 
     const onSubmit = async (data: ReportCreate): Promise<void> => {
+        console.log('Submitting form with reportId:', reportCount);
         if (
             data.date_start.length === 0 ||
             data.date_end.length === 0 ||
@@ -58,7 +67,10 @@ const CreateReport: React.FC = (): JSX.Element => {
             // Prevent the default form submission
             // (You might also want to perform additional validation or submit the form to the server here)
             // Log the report data
-            console.log('Report Data:', data);
+            await reportService.createReport(reportCount, data);
+            console.log('Before state update:', reportCount);
+            setReportCount((prevCount) => prevCount + 1);
+            console.log('After state update:', reportCount);
         }
     };
 
@@ -67,11 +79,12 @@ const CreateReport: React.FC = (): JSX.Element => {
             <h2 className="font-medium">Create a new report</h2>
             <Form onSubmit={onSubmit}>
                 {/* Form items for main report data */}
+
                 {/* Date Start */}
                 <FormItem>
                     <FormLabel>Date Start: </FormLabel>
                     <FormControl>
-                        <FormField name="date_start" render={({ field }) => <input type="text" {...field} value={field.value ?? ''} placeholder="Enter Date Start" />} />
+                        <FormField name="date_start" render={({ field }) => <input type="text" {...field} value={field.value ?? ''} placeholder="YYYY-MM-DD" />} />
                     </FormControl>
                 </FormItem>
 
@@ -79,7 +92,7 @@ const CreateReport: React.FC = (): JSX.Element => {
                 <FormItem>
                     <FormLabel>Date End: </FormLabel>
                     <FormControl>
-                        <FormField name="date_end" render={({ field }) => <input type="text" {...field} value={field.value ?? ''} placeholder="Enter Date End" />} />
+                        <FormField name="date_end" render={({ field }) => <input type="text" {...field} value={field.value ?? ''} placeholder="YYYY-MM-DD" />} />
                     </FormControl>
                 </FormItem>
 

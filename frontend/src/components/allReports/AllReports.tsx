@@ -1,5 +1,7 @@
 // components/AllReports.tsx
 import React, { useState, useEffect } from 'react';
+import { isNamedExports } from 'typescript';
+import { useNavigate } from 'react-router-dom';
 import reportService from '../services/reportService';
 import CreateReport from '../createReport/CreateReport';
 import { Alert, AlertDescription } from '../common/alert';
@@ -13,7 +15,9 @@ interface Report {
 }
 
 const AllReports: React.FC = (): JSX.Element => {
-    const [allReports, setAllReports] = useState([]);
+    const [allReports, setAllReports] = useState<Report[]>([]);
+    const [reportCount, setReportCount] = useState(1);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async (): Promise<void> => {
@@ -28,10 +32,27 @@ const AllReports: React.FC = (): JSX.Element => {
         void fetchData(); // Mark the promise as ignored with the `void` operator
     }, []);
 
+    useEffect(() => {
+        if (reportCount > 1) {
+            const fetchData = async (): Promise<void> => {
+                try {
+                    const response = await reportService.getAllReports();
+                    console.log('response', response);
+                    setAllReports(response);
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+            void fetchData(); // Mark the promise as ignored with the `void` operator
+        }
+        navigate('/');
+    }, [reportCount]);
+
     const handleDeleteReport = async (id: number): Promise<void> => {
         try {
             await reportService.deleteReport(id);
             setAllReports((prevReports) => prevReports.filter((report: Report) => report.id !== id));
+            // setReportCount(reportCount - 1);
         } catch (error) {
             console.error(error);
         }
@@ -44,9 +65,10 @@ const AllReports: React.FC = (): JSX.Element => {
     };
 
     console.log('allReports', allReports);
+    console.log('reportCount', reportCount);
     return (
         <div>
-            <CreateReport />
+            <CreateReport reportCount={reportCount} setReportCount={setReportCount} />
             <br />
             <hr />
             <br />
