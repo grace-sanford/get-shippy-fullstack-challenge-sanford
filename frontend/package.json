@@ -38,9 +38,11 @@
     "@types/node": "^20.4.7",
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
+    "axios": "^1.6.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
+    "cors": "^2.8.5",
     "date-fns": "^2.30.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -63,7 +65,8 @@
     "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "eslint": "eslint --cache --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -84,6 +87,9 @@
     ]
   },
   "devDependencies": {
+    "babel": "@babel/plugin-proposal-private-property-in-object",
+    "eslint": "^8.53.0",
+    "eslint-plugin-node": "^11.1.0",
     "tailwindcss": "^3.3.3"
   }
 }
