@@ -3,11 +3,23 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import reportService from '../services/reportService';
+import { Table, TableHeader, TableBody, TableRow, TableCell, TableCaption } from '../common/table';
 
-const ReportData: React.FC = (): JSX.Element => {
+type ReportDataType = Record<
+    string,
+    Record<
+        string,
+        {
+            close: number;
+            open: number;
+        }
+    >
+>;
+
+const ReportData: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const [reportData, setReportData] = useState<any>({});
+    const [reportData, setReportData] = useState<ReportDataType>({});
     const [formData, setFormData] = useState<any>({
         // Initialize the form data with the existing report details
         // You can update this based on your actual report structure
@@ -23,7 +35,6 @@ const ReportData: React.FC = (): JSX.Element => {
         const fetchData = async (): Promise<void> => {
             try {
                 const response = await reportService.getReportById(id);
-                console.log('Response data:', response);
                 setReportData(response);
                 setFormData({
                     name: response.name,
@@ -63,6 +74,20 @@ const ReportData: React.FC = (): JSX.Element => {
         }));
     };
 
+    useEffect(() => {
+        const fetchData = async (): Promise<void> => {
+            try {
+                const response = await reportService.getReportDataById(id);
+                console.log('response', response);
+                setReportData(response);
+            } catch (error) {
+                console.error('Error fetching report data:', error);
+            }
+        };
+
+        void fetchData();
+    }, [id]);
+
     return (
         <div>
             <h2>Edit Report</h2>
@@ -86,6 +111,27 @@ const ReportData: React.FC = (): JSX.Element => {
                 </div>
                 <button type="submit">Save Changes</button>
             </form>
+            <h2>Report Data</h2>
+            <Table>
+                <TableCaption>
+                    Report Data for ID: {id}, {formData.name}
+                </TableCaption>
+                <TableBody>
+                    {Object.entries(reportData).map(([date, rowData]) => (
+                        <TableRow key={date}>
+                            <TableCell>{date}</TableCell>
+                            {Object.entries(rowData).map(([ticker, { close, open }]) => (
+                                <React.Fragment key={ticker}>
+                                    <TableCell>{`${ticker} Close`}</TableCell>
+                                    <TableCell>{close as unknown as React.ReactNode}</TableCell>
+                                    <TableCell>{`${ticker} Open`}</TableCell>
+                                    <TableCell>{open as unknown as React.ReactNode}</TableCell>
+                                </React.Fragment>
+                            ))}
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
             <Link to="/">
                 <div style={{ color: 'lightblue' }}>Back to all reports</div>
             </Link>

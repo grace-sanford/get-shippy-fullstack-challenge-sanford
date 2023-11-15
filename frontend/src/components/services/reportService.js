@@ -11,6 +11,10 @@ const reportService = {
         const response = await axios.get(`${API_BASE_URL}/reports/${id}`);
         return response.data;
     },
+    getReportDataById: async (id) => {
+        const response = await axios.get(`${API_BASE_URL}/reports/${id}/data`);
+        return response.data;
+    },
     updateReportData: async (id, data) => {
         console.log('data -- updateReportData', data);
 
