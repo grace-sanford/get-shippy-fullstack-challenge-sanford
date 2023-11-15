@@ -7,6 +7,17 @@ const reportService = {
         const response = await axios.get(`${API_BASE_URL}/reports`);
         return response.data;
     },
+    getReportById: async (id) => {
+        const response = await axios.get(`${API_BASE_URL}/reports/${id}`);
+        return response.data;
+    },
+    updateReportData: async (id, data) => {
+        console.log('data -- updateReportData', data);
+
+        const response = await axios.put(`${API_BASE_URL}/reports/${id}`, data);
+        console.log('response -- reportService', response);
+        return response.data;
+    },
     createReport: async (id, data) => {
         console.log('data', data);
 

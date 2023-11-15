@@ -77,7 +77,7 @@ const AllReports: React.FC = (): JSX.Element => {
                     allReports.map((report: Report) => (
                         <li key={report.id}>
                             <div>
-                                <Link to={`/reports/${report.id}`}>
+                                <Link className="underline" style={{ color: 'blue' }} to={`/reports/${report.id}`}>
                                     {report.id}. {report.name}
                                 </Link>
                             </div>
