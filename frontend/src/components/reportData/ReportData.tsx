@@ -42,8 +42,6 @@ const ReportData: React.FC = (): JSX.Element => {
 
     const handleFormSubmit = (event: React.FormEvent): any => {
         event.preventDefault();
-        console.log('formData before submit:', formData);
-
         // Use ReportService to update the report data
         // Update the ReportService import based on your actual structure
         reportService
@@ -64,7 +62,6 @@ const ReportData: React.FC = (): JSX.Element => {
             [name]: value,
         }));
     };
-    console.log('formData', formData);
 
     return (
         <div>
