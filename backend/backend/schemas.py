@@ -44,7 +44,6 @@ class ReportCreate(BaseModel):
             except ValueError:
                 raise ValueError("Invalid date format. Use YYYY-MM-DD.")
         return value
-
     class Config:
         orm_mode = True
 

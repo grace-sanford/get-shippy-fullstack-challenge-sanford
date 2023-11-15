@@ -40,10 +40,10 @@ async def get_report_config(id: int, body: schemas.ReportCreate) -> schemas.Repo
 
 
 @app.put("/reports/{id}")
-async def put_report_config(id: int, body: schemas.ReportBase) -> None:
+async def put_report_config(id: int, body: schemas.ReportCreate) -> None:
     # TODO:
     try: 
-        updated_report = crud.update_report_config(db=db_session, id=id, report_data=body)
+        updated_report = crud.update_report_config_by_id(db=db_session, id=id, report_data=body)
         return updated_report
     except Exception as e:
         logger.error(e)
