@@ -23,10 +23,10 @@ const reportService = {
             if (error.response.length > 0 && error.response.status === 404) {
                 // Handle 404 error
                 console.error('Data not found:', error.response.data.detail);
-                throw new Error('Data not found'); // You can customize the error message as needed
+                throw new Error('Data not found');
             } else {
                 console.error('Error fetching data:', error);
-                throw new Error(`Error fetching data: ${error.response.data.detail}`); // You can customize the error message as needed
+                throw new Error(`Error fetching data: ${error.response.data.detail}`);
             }
         }
     },
