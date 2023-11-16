@@ -1,8 +1,8 @@
 # Directions
 
-![alt text](frontend/public/1.png?raw=true "Title")
-![alt text](frontend/public/2?raw=true "Title")
-![alt text](frontend/public/3.png?raw=true "Title")
+![alt text](frontend/public/allReports.png?raw=true "Title")
+![alt text](frontend/public/reportData.png?raw=true "Title")
+![alt text](frontend/public/calendarReport.png?raw=true "Title")
 
 
 ## Prompt
