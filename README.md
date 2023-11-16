@@ -1,5 +1,10 @@
 # Directions
 
+![alt text](frontend/public/Screenshot 2023-11-16 at 6.01.16 AM.png?raw=true "Title")
+![alt text](frontend/public/Screenshot 2023-11-16 at 6.01.29 AM.png?raw=true "Title")
+![alt text](frontend/public/Screenshot 2023-11-16 at 6.01.50 AM.png?raw=true "Title")
+
+
 ## Prompt
 Create a reactive, client-side rendered UI for configuring and viewing stock price reports. As part of this you will need to:
 - Complete the backend skeleton code to perform CRUD operation on the reports in the database
