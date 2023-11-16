@@ -1,11 +1,10 @@
 # Directions
-<br>
+
 ![alt text](frontend/public/allReports.png?raw=true "Title")
-<br>
+
 ![alt text](frontend/public/reportData.png?raw=true "Title")
-<br>
+
 ![alt text](frontend/public/calendarReport.png?raw=true "Title")
-<br>
 
 ## Prompt
 Create a reactive, client-side rendered UI for configuring and viewing stock price reports. As part of this you will need to:
