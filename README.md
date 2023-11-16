@@ -1,8 +1,8 @@
 # Directions
 
-![alt text](frontend/public/Screenshot 2023-11-16 at 6.01.16 AM.png?raw=true "Title")
-![alt text](frontend/public/Screenshot 2023-11-16 at 6.01.29 AM.png?raw=true "Title")
-![alt text](frontend/public/Screenshot 2023-11-16 at 6.01.50 AM.png?raw=true "Title")
+![alt text](frontend/public/1.png?raw=true "Title")
+![alt text](frontend/public/2?raw=true "Title")
+![alt text](frontend/public/3.png?raw=true "Title")
 
 
 ## Prompt
