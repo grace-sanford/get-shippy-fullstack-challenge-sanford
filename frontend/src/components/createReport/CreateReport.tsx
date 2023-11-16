@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, FormItem, FormLabel, FormControl, FormField } from '../common/form';
 import reportService from '../services/reportService';
+import { Alert, AlertDescription } from '../common/alert';
 
 interface TickerCreate {
     ticker: string;
@@ -47,21 +48,15 @@ const CreateReport: React.FC<CreateReportProps> = ({ reportCount, setReportCount
         console.log('filtered', filtered);
         console.log('Form data before validation:', data);
         // Validate main report data
-        if (
-            data.date_start?.trim() === '' ||
-            data.date_end?.trim() === '' ||
-            data.metric?.trim() === '' ||
-            data.name?.trim() === '' ||
-            data.tickers?.some((ticker: any) => ticker?.ticker?.trim() === '' || ticker?.metric?.trim() === '')
-        ) {
-            setError('Cannot create report with empty fields');
+        if (data.date_start === undefined || data.date_end === undefined || data.metric === undefined || data.name === undefined) {
+            setError('*Cannot create report with empty fields');
             console.log('Error', error);
             return;
         }
 
         // Validate tickers
         if (filtered === undefined || filtered.length === 0 || filtered.some((ticker) => ticker?.ticker === undefined || ticker?.metric === undefined)) {
-            setError('Cannot create report with empty ticker fields');
+            setError('*Cannot create report with empty ticker fields');
             console.log('Error', error);
             return;
         }
@@ -75,6 +70,7 @@ const CreateReport: React.FC<CreateReportProps> = ({ reportCount, setReportCount
                 console.log('After state update:', prevCount + 1);
                 return prevCount + 1;
             });
+            setError(null);
         } catch (error) {
             console.error('Error creating report:', error);
         }
@@ -170,7 +166,7 @@ const CreateReport: React.FC<CreateReportProps> = ({ reportCount, setReportCount
                         Add Ticker
                     </button>
                 </div>
-                {error !== null && <div style={{ color: 'red' }}>{error}</div>}
+                {error !== null && <AlertDescription style={{ color: 'red' }}>{error}</AlertDescription>}
 
                 {/* Submit button */}
                 <div>

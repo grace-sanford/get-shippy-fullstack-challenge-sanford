@@ -32,6 +32,7 @@ const ReportData: React.FC = () => {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentData = Object.entries(reportData).slice(indexOfFirstItem, indexOfLastItem);
     console.log('currentData', currentData);
+    const [formUpdate, setFormUpdate] = useState<boolean>(false);
 
     const [formData, setFormData] = useState<any>({
         // Initialize the form data with the existing report details
@@ -65,8 +66,9 @@ const ReportData: React.FC = () => {
                 console.error('Error fetching report details:', error);
             }
         };
+        setFormUpdate(false);
         void fetchData();
-    }, [id]);
+    }, [id, formUpdate]);
 
     const handleFormSubmit = (event: React.FormEvent): any => {
         event.preventDefault();
@@ -77,6 +79,7 @@ const ReportData: React.FC = () => {
             .then(() => {
                 // Optionally, you can redirect the user or perform additional actions
                 console.log('Report data updated successfully');
+                setFormUpdate(true);
             })
             .catch((error) => {
                 console.error('Error updating report data:', error);
@@ -101,9 +104,9 @@ const ReportData: React.FC = () => {
                 console.error('Error fetching report data:', error);
             }
         };
-
+        console.log('here');
         void fetchData();
-    }, [id]);
+    }, [formUpdate]);
 
     return (
         <div>
@@ -143,7 +146,6 @@ const ReportData: React.FC = () => {
                         <TableCaption>
                             Report Data for: {formData.name}, {formData.date_start.slice(0, 10)} - {formData.date_end.slice(0, 10)}
                         </TableCaption>
-                        <TableHeader>{formData.name}</TableHeader>
                         <TableBody>
                             {currentData.map(([date, rowData]) => (
                                 <TableRow key={date}>
