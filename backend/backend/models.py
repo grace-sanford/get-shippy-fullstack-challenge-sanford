@@ -8,7 +8,7 @@ from datetime import datetime
 
 Base = declarative_base()
 
-# TODO: define your SQLAlchemy models here
+# SQLAlchemy models here
 class Report(Base):
     __tablename__ = "reports"
     id = Column(Integer, primary_key=True, index=True)

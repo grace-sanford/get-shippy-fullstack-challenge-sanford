@@ -9,6 +9,7 @@ class Ticker(BaseModel):
     metric: str
 
 class ReportBase(BaseModel):
+    id: int
     date_start: datetime
     date_end: datetime
     metric: str
@@ -30,19 +31,20 @@ class ReportCreate(BaseModel):
     name: str
     tickers: List[TickerCreate]
 
-    @validator("date_start", "date_end", pre=True, always=True)
     def validate_date_format(cls, value):
         if value is not None:
             try:
                 # Attempt to parse the date string
                 date_obj = datetime.strptime(value, "%Y-%m-%d")
+
+                # If the input contains "T", assume it's a complete datetime string
+                if "T" in value:
+                    return value
+
                 # If no time is provided, append "T00:00:00"
-                if "T" not in value:
-                    return date_obj.strftime("%Y-%m-%dT00:00:00")
-                print("value", value)
-                return value
+                return f"{date_obj.date()}T00:00:00"
             except ValueError:
-                raise ValueError("Invalid date format. Use YYYY-MM-DD.")
+                raise ValueError("Invalid date format. Use YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss.")
         return value
     class Config:
         orm_mode = True
