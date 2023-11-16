@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, FormItem, FormLabel, FormControl, FormField } from '../common/form';
 import reportService from '../services/reportService';
@@ -41,38 +41,67 @@ const CreateReport: React.FC<CreateReportProps> = ({ reportCount, setReportCount
         }));
     };
 
-    const handleRemoveTicker = (index: number): void => {
-        const newTickers = [...reportData.tickers];
-        newTickers.splice(index, 1);
-
-        setReportData((prevData) => ({
-            ...prevData,
-            tickers: newTickers,
-        }));
-    };
-
     const onSubmit = async (data: ReportCreate): Promise<void> => {
         console.log('Submitting form with reportId:', reportCount);
+        const filtered = data.tickers.filter((ticker) => ticker.ticker !== undefined && ticker.metric !== undefined);
+        console.log('filtered', filtered);
+        console.log('Form data before validation:', data);
+        // Validate main report data
         if (
-            data.date_start.length === 0 ||
-            data.date_end.length === 0 ||
-            data.metric.length === 0 ||
-            data.name.length === 0 ||
-            data.tickers.some((ticker: any) => ticker?.ticker.length === 0 || ticker?.metric.length === 0)
+            data.date_start?.trim() === '' ||
+            data.date_end?.trim() === '' ||
+            data.metric?.trim() === '' ||
+            data.name?.trim() === '' ||
+            data.tickers?.some((ticker: any) => ticker?.ticker?.trim() === '' || ticker?.metric?.trim() === '')
         ) {
-            // Set an error state to display an error message
             setError('Cannot create report with empty fields');
             console.log('Error', error);
-        } else {
-            // Prevent the default form submission
-            // (You might also want to perform additional validation or submit the form to the server here)
+            return;
+        }
+
+        // Validate tickers
+        if (filtered === undefined || filtered.length === 0 || filtered.some((ticker) => ticker?.ticker === undefined || ticker?.metric === undefined)) {
+            setError('Cannot create report with empty ticker fields');
+            console.log('Error', error);
+            return;
+        }
+        try {
             // Log the report data
-            await reportService.createReport(reportCount, data);
+            await reportService.createReport(reportCount, { ...data, tickers: filtered });
             console.log('Before state update:', reportCount);
-            setReportCount((prevCount) => prevCount + 1);
-            console.log('After state update:', reportCount);
+
+            // Use the prevCount parameter to log the updated value
+            setReportCount((prevCount) => {
+                console.log('After state update:', prevCount + 1);
+                return prevCount + 1;
+            });
+        } catch (error) {
+            console.error('Error creating report:', error);
         }
     };
+
+    const handleRemoveTicker = (index: number): void => {
+        console.log('index inside handleRemoveTicker', index);
+        setReportData((prevData) => {
+            const newTickers = [...prevData.tickers];
+            newTickers.splice(index, 1);
+
+            return {
+                ...prevData,
+                tickers: newTickers,
+            };
+        });
+    };
+    useEffect(() => {
+        // Reset error when tickers are updated
+        setError(null);
+        console.log('set error null');
+    }, [reportData.tickers]);
+
+    useEffect(() => {
+        // This will run whenever reportData changes
+        console.log(reportData);
+    }, [reportData]);
 
     return (
         <div>

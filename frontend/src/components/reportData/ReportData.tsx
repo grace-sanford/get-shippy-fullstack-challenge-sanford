@@ -141,28 +141,10 @@ const ReportData: React.FC = () => {
                     <br />
                     <Table>
                         <TableCaption>
-                            Report Data for ID: {id}, {formData.name}
+                            Report Data for: {formData.name}, {formData.date_start.slice(0, 10)} - {formData.date_end.slice(0, 10)}
                         </TableCaption>
+                        <TableHeader>{formData.name}</TableHeader>
                         <TableBody>
-                            {/* {Object.entries(currentData).map(([date, rowData]) => (
-                                <TableRow key={date}>
-                                    <TableCell>{date}</TableCell>
-                                    {Object.entries(rowData).map(([ticker, { close, open, high, low, volume }]) => (
-                                        <React.Fragment key={ticker}>
-                                            <TableCell>{`${ticker} Open`}</TableCell>
-                                            <TableCell>{open as unknown as React.ReactNode}</TableCell>
-                                            <TableCell>{`${ticker} Close`}</TableCell>
-                                            <TableCell>{close as unknown as React.ReactNode}</TableCell>
-                                            <TableCell>{`${ticker} High`}</TableCell>
-                                            <TableCell style={{ color: 'green' }}>{high as unknown as React.ReactNode}</TableCell>
-                                            <TableCell>{`${ticker} Low`}</TableCell>
-                                            <TableCell style={{ color: 'red' }}>{low as unknown as React.ReactNode}</TableCell>
-                                            <TableCell>{`${ticker} Volume`}</TableCell>
-                                            <TableCell>{volume as unknown as React.ReactNode}</TableCell>
-                                        </React.Fragment>
-                                    ))}
-                                </TableRow>
-                            ))} */}
                             {currentData.map(([date, rowData]) => (
                                 <TableRow key={date}>
                                     <TableCell>{date}</TableCell>

@@ -25,6 +25,7 @@ const AllReports: React.FC = (): JSX.Element => {
                 const response = await reportService.getAllReports();
                 console.log('response', response);
                 setAllReports(response);
+                setReportCount((response.length as number) + 1);
             } catch (error) {
                 console.error(error);
             }
@@ -33,7 +34,7 @@ const AllReports: React.FC = (): JSX.Element => {
     }, []);
 
     useEffect(() => {
-        if (reportCount > 1) {
+        if (reportCount >= 1) {
             const fetchData = async (): Promise<void> => {
                 try {
                     const response = await reportService.getAllReports();
@@ -51,7 +52,7 @@ const AllReports: React.FC = (): JSX.Element => {
         try {
             await reportService.deleteReport(id);
             setAllReports((prevReports) => prevReports.filter((report: Report) => report.id !== id));
-            // setReportCount(reportCount - 1);
+            setReportCount(reportCount - 1);
         } catch (error) {
             console.error(error);
         }
@@ -63,7 +64,6 @@ const AllReports: React.FC = (): JSX.Element => {
         });
     };
 
-    console.log('allReports', allReports);
     console.log('reportCount', reportCount);
     return (
         <div>
