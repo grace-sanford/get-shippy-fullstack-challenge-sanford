@@ -90,15 +90,18 @@ const AllReports: React.FC = (): JSX.Element => {
                             <div>End Date: {report.date_end}</div>
                             <div>Metric: {report.metric}</div>
                             {/* Add more details as needed */}
+
                             <button
-                                style={{ color: 'red' }}
+                                style={{ color: 'red', fontSize: '12px' }}
                                 type="button"
                                 onClick={() => {
                                     handleDeleteReportWrapper(report.id);
                                 }}
                             >
-                                X Delete report
+                                <span style={{ border: '.5px solid red', padding: '2px', marginBottom: '1px' }}>X Delete report</span>
                             </button>
+
+                            <hr />
                         </li>
                     ))
                 ) : (
