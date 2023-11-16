@@ -6,7 +6,7 @@ import ReportCalendar from './components/views/ReportCalendar';
 const App: React.FC = (): JSX.Element => {
     return (
         <Router>
-            <div className="p-8">
+            <div className="p-8" style={{ padding: '50px' }}>
                 <Routes>
                     <Route path="/calendar" element={<ReportCalendar />} />
                     <Route path="/reports/:id" element={<ReportData />} />
