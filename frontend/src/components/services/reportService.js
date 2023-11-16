@@ -15,18 +15,27 @@ const reportService = {
         const response = await axios.get(`${API_BASE_URL}/reports/${id}/data`);
         return response.data;
     },
+    getDataByDate: async (selectedDay, ticker) => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/calendar/${selectedDay}/${ticker}`);
+            return response.data;
+        } catch (error) {
+            if (error.response.length > 0 && error.response.status === 404) {
+                // Handle 404 error
+                console.error('Data not found:', error.response.data.detail);
+                throw new Error('Data not found'); // You can customize the error message as needed
+            } else {
+                console.error('Error fetching data:', error);
+                throw new Error(`Error fetching data: ${error.response.data.detail}`); // You can customize the error message as needed
+            }
+        }
+    },
     updateReportData: async (id, data) => {
-        console.log('data -- updateReportData', data);
-
         const response = await axios.put(`${API_BASE_URL}/reports/${id}`, data);
-        console.log('response -- reportService', response);
         return response.data;
     },
     createReport: async (id, data) => {
-        console.log('data', data);
-
         const response = await axios.post(`${API_BASE_URL}/reports/${id}`, data);
-        console.log('response -- reportService', response);
         return response.data;
     },
     deleteReport: async (id) => {

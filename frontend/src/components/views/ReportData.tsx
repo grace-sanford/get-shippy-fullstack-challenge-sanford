@@ -31,7 +31,6 @@ const ReportData: React.FC = () => {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentData = Object.entries(reportData).slice(indexOfFirstItem, indexOfLastItem);
-    console.log('currentData', currentData);
     const [formUpdate, setFormUpdate] = useState<boolean>(false);
 
     const [formData, setFormData] = useState<any>({
@@ -78,7 +77,6 @@ const ReportData: React.FC = () => {
             .updateReportData(id, formData)
             .then(() => {
                 // Optionally, you can redirect the user or perform additional actions
-                console.log('Report data updated successfully');
                 setFormUpdate(true);
             })
             .catch((error) => {
@@ -98,14 +96,12 @@ const ReportData: React.FC = () => {
         const fetchData = async (): Promise<void> => {
             try {
                 const response = await reportService.getReportDataById(id);
-                console.log('response', response);
                 setReportData(response);
             } catch (error) {
                 console.error('Error fetching report data:', error);
             }
         };
-        console.log('here');
-        void fetchData();
+        void fetchData(); // Invoking the fetchData function when the component mounts or when formUpdate changes
     }, [formUpdate]);
 
     return (

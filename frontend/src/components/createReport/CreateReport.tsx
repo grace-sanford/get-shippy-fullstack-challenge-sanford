@@ -23,7 +23,6 @@ interface CreateReportProps {
 }
 
 const CreateReport: React.FC<CreateReportProps> = ({ reportCount, setReportCount }): JSX.Element => {
-    console.log('Render CreateReport with reportId:', reportCount);
     const [reportData, setReportData] = useState<ReportCreate>({
         id: reportCount,
         date_start: '',
@@ -43,31 +42,24 @@ const CreateReport: React.FC<CreateReportProps> = ({ reportCount, setReportCount
     };
 
     const onSubmit = async (data: ReportCreate): Promise<void> => {
-        console.log('Submitting form with reportId:', reportCount);
         const filtered = data.tickers.filter((ticker) => ticker.ticker !== undefined && ticker.metric !== undefined);
-        console.log('filtered', filtered);
-        console.log('Form data before validation:', data);
         // Validate main report data
         if (data.date_start === undefined || data.date_end === undefined || data.metric === undefined || data.name === undefined) {
             setError('*Cannot create report with empty fields');
-            console.log('Error', error);
             return;
         }
 
         // Validate tickers
         if (filtered === undefined || filtered.length === 0 || filtered.some((ticker) => ticker?.ticker === undefined || ticker?.metric === undefined)) {
             setError('*Cannot create report with empty ticker fields');
-            console.log('Error', error);
             return;
         }
         try {
             // Log the report data
             await reportService.createReport(reportCount, { ...data, tickers: filtered });
-            console.log('Before state update:', reportCount);
 
             // Use the prevCount parameter to log the updated value
             setReportCount((prevCount) => {
-                console.log('After state update:', prevCount + 1);
                 return prevCount + 1;
             });
             setError(null);
@@ -77,7 +69,6 @@ const CreateReport: React.FC<CreateReportProps> = ({ reportCount, setReportCount
     };
 
     const handleRemoveTicker = (index: number): void => {
-        console.log('index inside handleRemoveTicker', index);
         setReportData((prevData) => {
             const newTickers = [...prevData.tickers];
             newTickers.splice(index, 1);
@@ -91,13 +82,7 @@ const CreateReport: React.FC<CreateReportProps> = ({ reportCount, setReportCount
     useEffect(() => {
         // Reset error when tickers are updated
         setError(null);
-        console.log('set error null');
     }, [reportData.tickers]);
-
-    useEffect(() => {
-        // This will run whenever reportData changes
-        console.log(reportData);
-    }, [reportData]);
 
     return (
         <div>

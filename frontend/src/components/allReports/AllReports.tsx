@@ -23,7 +23,6 @@ const AllReports: React.FC = (): JSX.Element => {
         const fetchData = async (): Promise<void> => {
             try {
                 const response = await reportService.getAllReports();
-                console.log('response', response);
                 setAllReports(response);
                 setReportCount((response.length as number) + 1);
             } catch (error) {
@@ -38,7 +37,6 @@ const AllReports: React.FC = (): JSX.Element => {
             const fetchData = async (): Promise<void> => {
                 try {
                     const response = await reportService.getAllReports();
-                    console.log('response', response);
                     setAllReports(response);
                 } catch (error) {
                     console.error(error);
@@ -64,10 +62,16 @@ const AllReports: React.FC = (): JSX.Element => {
         });
     };
 
-    console.log('reportCount', reportCount);
     return (
         <div>
-            <CreateReport reportCount={reportCount} setReportCount={setReportCount} />
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <CreateReport reportCount={reportCount} setReportCount={setReportCount} />
+                <AlertDescription>
+                    <Link to="/calendar" style={{ color: 'navy', alignSelf: 'flex-start' }}>
+                        Beta: Try Calendar view!
+                    </Link>
+                </AlertDescription>
+            </div>
             <br />
             <hr />
             <br />
