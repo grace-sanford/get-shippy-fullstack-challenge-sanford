@@ -145,7 +145,9 @@ const CreateReport: React.FC<CreateReportProps> = ({ reportCount, setReportCount
 
                 {/* Submit button */}
                 <div>
-                    <button type="submit">Generate report</button>
+                    <button type="submit" style={{ color: 'green' }}>
+                        Generate report
+                    </button>
                 </div>
             </Form>
         </div>

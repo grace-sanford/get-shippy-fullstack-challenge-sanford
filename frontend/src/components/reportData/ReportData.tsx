@@ -12,6 +12,9 @@ type ReportDataType = Record<
         {
             close: number;
             open: number;
+            high: number;
+            low: number;
+            volume: number;
         }
     >
 >;
@@ -20,6 +23,16 @@ const ReportData: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [reportData, setReportData] = useState<ReportDataType>({});
+    const [loading, setLoading] = useState<any>(true);
+
+    const [currentPage, setCurrentPage] = useState<number>(1);
+
+    const itemsPerPage = 10;
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentData = Object.entries(reportData).slice(indexOfFirstItem, indexOfLastItem);
+    console.log('currentData', currentData);
+
     const [formData, setFormData] = useState<any>({
         // Initialize the form data with the existing report details
         // You can update this based on your actual report structure
@@ -32,6 +45,9 @@ const ReportData: React.FC = () => {
     });
 
     useEffect(() => {
+        setTimeout(() => {
+            setLoading(true);
+        }, 100);
         const fetchData = async (): Promise<void> => {
             try {
                 const response = await reportService.getReportById(id);
@@ -44,6 +60,7 @@ const ReportData: React.FC = () => {
                     tickers: response.tickers,
                     // Update with more fields as needed
                 });
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching report details:', error);
             }
@@ -90,7 +107,7 @@ const ReportData: React.FC = () => {
 
     return (
         <div>
-            <h2>Edit Report</h2>
+            {/* <h2>Edit Report</h2> */}
             <form onSubmit={handleFormSubmit}>
                 {/* Add form fields based on your actual report structure */}
                 <div>
@@ -109,32 +126,93 @@ const ReportData: React.FC = () => {
                     <label>Metric: </label>
                     <input type="text" name="metric" placeholder={formData.metric} onChange={handleInputChange} />
                 </div>
-                <button type="submit">Save Changes</button>
+                <button type="submit" style={{ color: 'green' }}>
+                    Update report
+                </button>
             </form>
-            <h2>Report Data</h2>
-            <Table>
-                <TableCaption>
-                    Report Data for ID: {id}, {formData.name}
-                </TableCaption>
-                <TableBody>
-                    {Object.entries(reportData).map(([date, rowData]) => (
-                        <TableRow key={date}>
-                            <TableCell>{date}</TableCell>
-                            {Object.entries(rowData).map(([ticker, { close, open }]) => (
-                                <React.Fragment key={ticker}>
-                                    <TableCell>{`${ticker} Close`}</TableCell>
-                                    <TableCell>{close as unknown as React.ReactNode}</TableCell>
-                                    <TableCell>{`${ticker} Open`}</TableCell>
-                                    <TableCell>{open as unknown as React.ReactNode}</TableCell>
-                                </React.Fragment>
+
+            {loading === true ? (
+                <p style={{ textAlign: 'center' }}>Loading...</p>
+            ) : (
+                <div>
+                    <br />
+                    <hr />
+
+                    <br />
+                    <Table>
+                        <TableCaption>
+                            Report Data for ID: {id}, {formData.name}
+                        </TableCaption>
+                        <TableBody>
+                            {/* {Object.entries(currentData).map(([date, rowData]) => (
+                                <TableRow key={date}>
+                                    <TableCell>{date}</TableCell>
+                                    {Object.entries(rowData).map(([ticker, { close, open, high, low, volume }]) => (
+                                        <React.Fragment key={ticker}>
+                                            <TableCell>{`${ticker} Open`}</TableCell>
+                                            <TableCell>{open as unknown as React.ReactNode}</TableCell>
+                                            <TableCell>{`${ticker} Close`}</TableCell>
+                                            <TableCell>{close as unknown as React.ReactNode}</TableCell>
+                                            <TableCell>{`${ticker} High`}</TableCell>
+                                            <TableCell style={{ color: 'green' }}>{high as unknown as React.ReactNode}</TableCell>
+                                            <TableCell>{`${ticker} Low`}</TableCell>
+                                            <TableCell style={{ color: 'red' }}>{low as unknown as React.ReactNode}</TableCell>
+                                            <TableCell>{`${ticker} Volume`}</TableCell>
+                                            <TableCell>{volume as unknown as React.ReactNode}</TableCell>
+                                        </React.Fragment>
+                                    ))}
+                                </TableRow>
+                            ))} */}
+                            {currentData.map(([date, rowData]) => (
+                                <TableRow key={date}>
+                                    <TableCell>{date}</TableCell>
+                                    {Object.entries(rowData).map(([ticker, { close, open, high, low, volume }]) => (
+                                        <React.Fragment key={ticker}>
+                                            <TableCell>{`${ticker} Open`}</TableCell>
+                                            <TableCell>{open as unknown as React.ReactNode}</TableCell>
+                                            <TableCell>{`${ticker} Close`}</TableCell>
+                                            <TableCell>{close as unknown as React.ReactNode}</TableCell>
+                                            <TableCell>{`${ticker} High`}</TableCell>
+                                            <TableCell style={{ color: 'green' }}>{high as unknown as React.ReactNode}</TableCell>
+                                            <TableCell>{`${ticker} Low`}</TableCell>
+                                            <TableCell style={{ color: 'red' }}>{low as unknown as React.ReactNode}</TableCell>
+                                            <TableCell>{`${ticker} Volume`}</TableCell>
+                                            <TableCell>{volume as unknown as React.ReactNode}</TableCell>
+                                        </React.Fragment>
+                                    ))}
+                                </TableRow>
                             ))}
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-            <Link to="/">
-                <div style={{ color: 'lightblue' }}>Back to all reports</div>
-            </Link>
+                        </TableBody>
+                    </Table>
+                    {/* Pagination */}
+                    <div style={{ textAlign: 'center', marginTop: '10px' }}>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setCurrentPage((prevPage) => Math.max(1, prevPage - 1));
+                            }}
+                            disabled={currentPage === 1}
+                        >
+                            Previous
+                        </button>
+                        <span style={{ margin: '0 10px' }}>
+                            Page {currentPage} of {Math.ceil(Object.keys(reportData).length / itemsPerPage)}
+                        </span>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setCurrentPage((prevPage) => Math.min(prevPage + 1, Math.ceil(Object.keys(reportData).length / itemsPerPage)));
+                            }}
+                            disabled={indexOfLastItem >= Object.keys(reportData).length}
+                        >
+                            Next
+                        </button>
+                    </div>
+                    <Link to="/">
+                        <div style={{ color: 'lightblue' }}>Back to all reports</div>
+                    </Link>
+                </div>
+            )}
         </div>
     );
 };
